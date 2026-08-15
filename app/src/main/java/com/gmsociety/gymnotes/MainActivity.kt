@@ -3,27 +3,36 @@ package com.gmsociety.gymnotes
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+
+import androidx.lifecycle.ViewModelProvider
+import com.gmsociety.gymnotes.data.local.GymNotesDatabase
+import com.gmsociety.gymnotes.data.repository.NoteRepository
 import com.gmsociety.gymnotes.ui.theme.GymNotesTheme
 import com.gmsociety.gymnotes.ui.theme.screens.notes.NotesScreen
+import com.gmsociety.gymnotes.viewmodel.NotesViewModel
+import com.gmsociety.gymnotes.viewmodel.NotesViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Database
+        val database = GymNotesDatabase.getDatabase(applicationContext)
+
+        // Repository
+        val repository = NoteRepository(database.noteDao())
+
+        // ViewModel
+        val viewModel = ViewModelProvider(
+            this,
+            NotesViewModelFactory(repository)
+        )[NotesViewModel::class.java]
 
         window.navigationBarColor = android.graphics.Color.BLACK
 
         setContent {
             GymNotesTheme {
-                NotesScreen()
+                NotesScreen(viewModel = viewModel)
             }
         }
     }
