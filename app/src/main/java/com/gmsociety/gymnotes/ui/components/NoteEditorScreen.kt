@@ -96,16 +96,19 @@ fun NoteEditorScreen(
         label = "arrowRotation"
     )
 
+    // Animacja wejścia
     LaunchedEffect(Unit) {
         isVisible = true
     }
 
+    // Automatyczne ustawienie focusa na tytule
     LaunchedEffect(isEditingTitle) {
         if (isEditingTitle) {
             focusRequester.requestFocus()
         }
     }
 
+    // Zamknięcie edycji tytułu po schowaniu klawiatury
     LaunchedEffect(isKeyboardVisible) {
         if (!isKeyboardVisible && isEditingTitle) {
             focusManager.clearFocus()
@@ -115,12 +118,18 @@ fun NoteEditorScreen(
 
     // AUTOSAVE
     LaunchedEffect(title.text, content) {
+        if (note == null) {
+            return@LaunchedEffect
+        }
+
         if (
             title.text.isBlank() &&
             content.isBlank()
         ) {
             return@LaunchedEffect
         }
+
+        delay(500)
 
         onAutoSave(
             title.text,
@@ -147,6 +156,7 @@ fun NoteEditorScreen(
                     .background(Color.Black)
             ) {
 
+                // TOP BAR
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -157,6 +167,7 @@ fun NoteEditorScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
+                    // BACK
                     IconButton(
                         onClick = {
                             if (isEditingTitle) {
@@ -177,6 +188,7 @@ fun NoteEditorScreen(
                         )
                     }
 
+                    // TITLE
                     if (isEditingTitle) {
 
                         BasicTextField(
@@ -236,12 +248,18 @@ fun NoteEditorScreen(
                         )
                     }
 
+                    // SAVE
                     IconButton(
                         onClick = {
-                            onSave(
-                                title.text,
-                                content
-                            )
+                            if (
+                                title.text.isNotBlank() ||
+                                content.isNotBlank()
+                            ) {
+                                onSave(
+                                    title.text,
+                                    content
+                                )
+                            }
                         },
                         enabled = title.text.isNotBlank() ||
                                 content.isNotBlank()
@@ -259,6 +277,7 @@ fun NoteEditorScreen(
                     thickness = 1.dp
                 )
 
+                // CONTENT
                 Column(
                     modifier = Modifier
                         .fillMaxSize()

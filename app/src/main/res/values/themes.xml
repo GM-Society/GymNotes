@@ -7,7 +7,9 @@
         <item name="postSplashScreenTheme">@style/Theme.GymNotes</item>
     </style>
 
-    <style name="Theme.GymNotes" parent="android:Theme.Material.NoActionBar">
+    <style name="Theme.GymNotes" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
     </style>
 
 </resources>

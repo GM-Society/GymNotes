@@ -3,6 +3,7 @@ package com.gmsociety.gymnotes
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 import androidx.lifecycle.ViewModelProvider
 import com.gmsociety.gymnotes.data.local.GymNotesDatabase
@@ -14,6 +15,8 @@ import com.gmsociety.gymnotes.viewmodel.NotesViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
 
         // Database
