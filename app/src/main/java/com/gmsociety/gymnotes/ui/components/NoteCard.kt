@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -89,20 +88,20 @@ fun NoteCard(
         }
 
         Text(
-            text =  if (note.title.isBlank()) {
-                        "Title"
-                    } else {
-                        if (note.title.lines().first().length > 8) {
-                            note.title.lines().first().take(8).trim() + "..."
-                        } else {
-                            note.title.lines().first().trim()
-                        }
-                    },
+            text = if (note.title.isBlank()) {
+                "Title"
+            } else {
+                if (note.title.lines().first().length > 8) {
+                    note.title.lines().first().take(8).trim() + "..."
+                } else {
+                    note.title.lines().first().trim()
+                }
+            },
             color = Color.White,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(horizontal = 4.dp)
-                .fillMaxWidth(1f),
+                .fillMaxWidth(),
             style = MaterialTheme.typography.titleMedium
         )
 

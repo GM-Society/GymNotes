@@ -40,6 +40,11 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.gmsociety.gymnotes.data.local.Note
 import com.gmsociety.gymnotes.ui.theme.notesBackgroudColor
+import java.time.Instant
+import java.time.ZoneId
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun NotesPanel(
@@ -79,6 +84,23 @@ fun NotesPanel(
             ignoreCase = true
         )
     }
+
+    val notesByMonth = filteredNotes
+        .sortedByDescending {
+            it.createdAt
+        }
+        .groupBy {
+            Instant.ofEpochMilli(it.createdAt)
+                .atZone(ZoneId.systemDefault())
+                .let {
+                    YearMonth.from(it)
+                }
+        }
+
+    val monthFormatter = DateTimeFormatter.ofPattern(
+        "LLLL yyyy",
+        Locale.getDefault()
+    )
 
     Surface(
         modifier = modifier.pointerInput(Unit) {
@@ -213,14 +235,41 @@ fun NotesPanel(
                 }
             }
 
-//            NOTES
-            items(filteredNotes) { note ->
-                NoteCard(
-                    note = note,
-                    onClick = {
-                        onNoteClick(note)
+//            NOTES BY MONTH
+            notesByMonth.forEach { (month, monthNotes) ->
+
+                item(
+                    span = {
+                        GridItemSpan(2)
                     }
-                )
+                ) {
+                    Text(
+                        text = month
+                            .format(monthFormatter)
+                            .replaceFirstChar {
+                                it.uppercase()
+                            },
+                        color = Color.White,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                top = 12.dp,
+                                bottom = 4.dp
+                            ),
+                        style = androidx.compose.material3.MaterialTheme
+                            .typography
+                            .titleMedium
+                    )
+                }
+
+                items(monthNotes) { note ->
+                    NoteCard(
+                        note = note,
+                        onClick = {
+                            onNoteClick(note)
+                        }
+                    )
+                }
             }
         }
     }

@@ -62,6 +62,22 @@ fun NotesScreen(
                 selectedNote = null
             },
 
+            onAutoSave = { title, content ->
+
+                if (selectedNote == null) {
+                    viewModel.addNote(
+                        title = title,
+                        content = content
+                    )
+                } else {
+                    viewModel.updateNote(
+                        note = selectedNote!!,
+                        title = title,
+                        content = content
+                    )
+                }
+            },
+
             onSave = { title, content ->
 
                 if (selectedNote == null) {

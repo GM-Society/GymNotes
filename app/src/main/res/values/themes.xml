@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.GymNotes" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.GymNotes.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#000000</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.GymNotes</item>
+    </style>
+
+    <style name="Theme.GymNotes" parent="android:Theme.Material.NoActionBar">
+    </style>
+
 </resources>
