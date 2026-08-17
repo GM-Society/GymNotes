@@ -53,6 +53,10 @@ fun NotesScreen(
         mutableStateOf(false)
     }
 
+    var isNewNote by remember {
+        mutableStateOf(false)
+    }
+
     if (showEditor) {
         NoteEditorScreen(
             note = selectedNote,
@@ -60,41 +64,52 @@ fun NotesScreen(
             onBack = {
                 showEditor = false
                 selectedNote = null
+                isNewNote = false
             },
 
             onAutoSave = { title, content ->
 
-                if (selectedNote == null) {
+                if (isNewNote) {
                     viewModel.addNote(
                         title = title,
                         content = content
-                    )
+                    ) { newNote ->
+                        selectedNote = newNote
+                        isNewNote = false
+                    }
                 } else {
-                    viewModel.updateNote(
-                        note = selectedNote!!,
-                        title = title,
-                        content = content
-                    )
+                    selectedNote?.let { note ->
+                        viewModel.updateNote(
+                            note = note,
+                            title = title,
+                            content = content
+                        )
+                    }
                 }
             },
 
             onSave = { title, content ->
 
-                if (selectedNote == null) {
+                if (isNewNote) {
                     viewModel.addNote(
                         title = title,
                         content = content
-                    )
+                    ) { newNote ->
+                        selectedNote = newNote
+                    }
                 } else {
-                    viewModel.updateNote(
-                        note = selectedNote!!,
-                        title = title,
-                        content = content
-                    )
+                    selectedNote?.let { note ->
+                        viewModel.updateNote(
+                            note = note,
+                            title = title,
+                            content = content
+                        )
+                    }
                 }
 
                 showEditor = false
                 selectedNote = null
+                isNewNote = false
             }
         )
 
@@ -155,11 +170,14 @@ fun NotesScreen(
                 notes = notes.value,
 
                 onAddNote = {
+                    selectedNote = null
+                    isNewNote = true
                     showEditor = true
                 },
 
                 onNoteClick = { note ->
                     selectedNote = note
+                    isNewNote = false
                     showEditor = true
                 },
 
@@ -168,10 +186,6 @@ fun NotesScreen(
                         .coerceIn(0f, 1f)
                 }
             )
-
-
-
-
         }
     }
 }

@@ -22,12 +22,13 @@ class NotesViewModel(
 
     fun addNote(
         title: String,
-        content: String
+        content: String,
+        onCreated: (Note) -> Unit
     ) {
         viewModelScope.launch {
             val now = System.currentTimeMillis()
 
-            repository.insertNote(
+            val id = repository.insertNote(
                 Note(
                     title = title,
                     content = content,
@@ -35,6 +36,12 @@ class NotesViewModel(
                     updatedAt = now
                 )
             )
+
+            val note = repository.getNoteById(id)
+
+            if (note != null) {
+                onCreated(note)
+            }
         }
     }
 
@@ -53,7 +60,6 @@ class NotesViewModel(
             )
         }
     }
-
 
     fun deleteNote(note: Note) {
         viewModelScope.launch {

@@ -11,12 +11,12 @@ class NoteRepository(
     val allNotes: Flow<List<Note>> =
         noteDao.getAllNotes()
 
-    suspend fun getNoteById(id: Long): Note? {
-        return noteDao.getNoteById(id)
-    }
-
     suspend fun insertNote(note: Note): Long {
         return noteDao.insertNote(note)
+    }
+
+    suspend fun getNoteById(id: Long): Note? {
+        return noteDao.getNoteById(id)
     }
 
     suspend fun updateNote(note: Note) {
